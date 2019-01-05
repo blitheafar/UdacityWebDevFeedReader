@@ -49,43 +49,55 @@ $(function() {
   /* TODO: 写一个叫做 "The menu" 的测试用例 */
   describe('The menu', function() {
 
-  /* TODO:
-   * 写一个测试用例保证菜单元素默认是隐藏的。你需要分析 html 和 css
-   * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
-   */
-   it('菜单默认隐藏',function() {
-     expect($("body").hasClass('menu-hidden')).toBeTruthy();
-   });
+    /* TODO:
+     * 写一个测试用例保证菜单元素默认是隐藏的。你需要分析 html 和 css
+     * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
+     */
+    it('菜单默认隐藏', function() {
+      expect($("body").hasClass('menu-hidden')).toBeTruthy();
+    });
 
-  /* TODO:
-   * 写一个测试用例保证当菜单图标被点击的时候菜单会切换可见状态。这个
-   * 测试应该包含两个 expectation ： 党点击图标的时候菜单是否显示，
-   * 再次点击的时候是否隐藏。
-   */
-   it('菜单点击切换可见',function() {
-     //自动触发点击效果来测试
-     document.getElementsByClassName('menu-icon-link')[0].click();
-     expect($("body").hasClass('menu-hidden')).toBeFalsy();
+    /* TODO:
+     * 写一个测试用例保证当菜单图标被点击的时候菜单会切换可见状态。这个
+     * 测试应该包含两个 expectation ： 党点击图标的时候菜单是否显示，
+     * 再次点击的时候是否隐藏。
+     */
+    it('菜单点击切换可见', function() {
+      //自动触发点击效果来测试
+      document.getElementsByClassName('menu-icon-link')[0].click();
+      expect($("body").hasClass('menu-hidden')).toBeFalsy();
 
-     document.getElementsByClassName('menu-icon-link')[0].click();
-     expect($("body").hasClass('menu-hidden')).toBeTruthy();
-   });
-   });
+      document.getElementsByClassName('menu-icon-link')[0].click();
+      expect($("body").hasClass('menu-hidden')).toBeTruthy();
+    });
+  });
 
   /* TODO: 13. 写一个叫做 "Initial Entries" 的测试用例 */
+  describe('Initial Entries', function() {
+    beforeEach(function(done) {
+      loadFeed(0,done);
+    });
 
-  /* TODO:
-   * 写一个测试保证 loadFeed 函数被调用而且工作正常，即在 .feed 容器元素
-   * 里面至少有一个 .entry 的元素。
-   *
-   * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
-   * 和异步的 done() 函数。
-   */
+    /* TODO:
+     * 写一个测试保证 loadFeed 函数被调用而且工作正常，即在 .feed 容器元素
+     * 里面至少有一个 .entry 的元素。
+     *
+     * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
+     * 和异步的 done() 函数。
+     */
+    it('loadFeed调用', function(done) {
+      var entryLength=document.getElementsByClassName('feed')[0].getElementsByClassName('entry').length;
 
-  /* TODO: 写一个叫做 "New Feed Selection" 的测试用例 */
+      expect(entryLength).toBeGreaterThan(0);
+      done();
+    });
 
-  /* TODO:
-   * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
-   * 记住，loadFeed() 函数是异步的。
-   */
+    /* TODO: 写一个叫做 "New Feed Selection" 的测试用例 */
+
+    /* TODO:
+     * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
+     * 记住，loadFeed() 函数是异步的。
+     */
+
+  });
 }());
