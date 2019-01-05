@@ -1,46 +1,39 @@
 /* app.js
  *
- * This is our RSS feed reader application. It uses the Google
- * Feed Reader API to grab RSS feeds as JSON object we can make
- * use of. It also uses the Handlebars templating library and
- * jQuery.
+ * 这是我们的 Rss 订阅阅读器应用。它使用 Goole Feed Reader API 将 RSS
+ * 源转换成我们能够利用的 JSON 对象。它还使用了 Handlebars 模板库和 Jquery.
  */
 
-// The names and URLs to all of the feeds we'd like available.
+// 所有的名字和链接都是真实可用的
 var allFeeds = [
     {
-        name: 'Udacity Blog',
+        name: '优达学城 Blog',
         url: 'http://blog.udacity.com/feed'
     }, {
-        name: 'CSS Tricks',
-        url: 'http://feeds.feedburner.com/CssTricks'
+        name: '腾讯CDC',
+        url: 'http://cdc.tencent.com/feed/'
     }, {
-        name: 'HTML5 Rocks',
-        url: 'http://feeds.feedburner.com/html5rocks'
+        name: 'Matrix67(数学爱好者)',
+        url: 'http://www.matrix67.com/blog/feed'
     }, {
-        name: 'Linear Digressions',
-        url: 'http://feeds.feedburner.com/udacity-linear-digressions'
+        name: 'TechCrunch中国',
+        url: 'http://techcrunch.cn/feed/'
     }
 ];
 
-
-/* This function starts up our application. The Google Feed
- * Reader API is loaded asynchonously and will then call this
- * function when the API is loaded.
+/* 这个函数负责启动我们的应用，Google Feed Reader API 会被异步加载
+ * 然后调用这个方法。
  */
 function init() {
-    // Load the first feed we've defined (index of 0).
+    // 加载我们定义的第一个源。
     loadFeed(0);
 }
 
-/* This function performs everything necessary to load a
- * feed using the Google Feed Reader API. It will then
- * perform all of the DOM operations required to display
- * feed entries on the page. Feeds are referenced by their
- * index position within the allFeeds array.
- * This function all supports a callback as the second parameter
- * which will be called after everything has run successfully.
- */
+/* 这个函数用 Google Feed Reader API 加载 RSS 源。然后做一些
+ * DOM 操作使源的内容被展示在页面上。每个源都可以通过他们在 allFeeds
+ * 数组里面的位置引用。这个函数还支持一个回调函数作为第二个参数，
+ * 这个回调函数会在所有事情都成功完成之后被调用。
+*/
  function loadFeed(id, cb) {
      var feedUrl = allFeeds[id].url,
          feedName = allFeeds[id].name;
@@ -58,14 +51,13 @@ function init() {
                      entriesLen = entries.length,
                      entryTemplate = Handlebars.compile($('.tpl-entry').html());
 
-                 title.html(feedName);   // Set the header text
-                 container.empty();      // Empty out all previous entries
+                 title.html(feedName);   // 设置 header
+                 container.empty();      // 将之前的所有内容置空
 
-                 /* Loop through the entries we just loaded via the Google
-                  * Feed Reader API. We'll then parse that entry against the
-                  * entryTemplate (created above using Handlebars) and append
-                  * the resulting HTML to the list of entries on the page.
-                  */
+                 /* 遍历所有我们通过 Google Feed Reader API 加载的条目，然后用
+                  * entryTemplate （上面用 Handerbars 创建的）解析每个条目。然后
+                  * 把转换得到的 HTML 添加到页面上的条目列表。
+                 */
                  entries.forEach(function(entry) {
                      container.append(entryTemplate(entry));
                  });
@@ -75,7 +67,7 @@ function init() {
                  }
                },
        error: function (result, status, err){
-                 //run only the callback without attempting to parse result due to error
+                 // 如果有错，就不解析结果而是只运行回调函数。
                  if (cb) {
                      cb();
                  }
@@ -84,14 +76,11 @@ function init() {
      });
  }
 
-/* Google API: Loads the Feed Reader API and defines what function
- * to call when the Feed Reader API is done loading.
- */
+/* Google API: 加载 Feed Reader API 和定义当加载结束之后调用什么函数。*/
 google.setOnLoadCallback(init);
 
-/* All of this functionality is heavily reliant upon the DOM, so we
- * place our code in the $() function to ensure it doesn't execute
- * until the DOM is ready.
+/* 所有的这些功能都严重依赖 DOM 。所以把我们的代码放在 $ 函数里面以保证在 DOM
+ * 构建完毕之前它不会被执行。
  */
 $(function() {
     var container = $('.feed'),
@@ -100,12 +89,10 @@ $(function() {
         feedId = 0,
         menuIcon = $('.menu-icon-link');
 
-    /* Loop through all of our feeds, assigning an id property to
-     * each of the feeds based upon its index within the array.
-     * Then parse that feed against the feedItemTemplate (created
-     * above using Handlebars) and append it to the list of all
-     * available feeds within the menu.
-     */
+    /* 遍历我们所有的源，给每个源添加一个基于位置索引的 ID 。然后用
+     * feedItemTemplate （上面用 Handlebars 创建的）来解析那个源。
+     * 然后添加到菜单里面的现有源列表。
+    */
     allFeeds.forEach(function(feed) {
         feed.id = feedId;
         feedList.append(feedItemTemplate(feed));
@@ -113,9 +100,8 @@ $(function() {
         feedId++;
     });
 
-    /* When a link in our feedList is clicked on, we want to hide
-     * the menu, load the feed, and prevent the default action
-     * (following the link) from occurring.
+    /* 当我们的源列表中的一个链接被点击的时候，我们想要隐藏菜单，加载该源，
+     * 组织链接的默认点击行为发生。
      */
     feedList.on('click', 'a', function() {
         var item = $(this);
@@ -125,8 +111,8 @@ $(function() {
         return false;
     });
 
-    /* When the menu icon is clicked on, we need to toggle a class
-     * on the body to perform the hiding/showing of our menu.
+    /* 当菜单图标被点击的时候，我们需要在 body 元素上切换一个类名来实现
+     * 菜单的显示状态的切换。
      */
     menuIcon.on('click', function() {
         $('body').toggleClass('menu-hidden');
